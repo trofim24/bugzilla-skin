@@ -1,0 +1,33 @@
+.bz_buglist {
+    margin: 16px 0;
+    border-top: 1px solid var(--grid-border-color);
+    background-color: var(--grid-background-color);
+    box-shadow: var(--primary-region-box-shadow);
+}
+
+.bz_buglist thead {
+    position: sticky;
+    top: 0;
+    background: var(--grid-header-background-color);
+}
+
+.bz_buglist thead th {
+    padding: 4px 8px;
+}
+
+.bz_buglist_header th {
+    border-bottom: 1px solid var(--grid-border-color);
+    padding-top: 4px;
+    padding-bottom: 4px;
+    color: var(--secondary-label-color);
+    font-size: var(--font-size-small);
+    text-align: left;
+}
+
+.bz_buglist_header th:not(:last-of-type) {
+    border-right: 1px solid var(--grid-border-color);
+}
+
+.bz_buglist tr {
+    border-bottom: 1px solid var(--grid-border-color);
+}
