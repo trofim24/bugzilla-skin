@@ -1,0 +1,99 @@
+:root {
+    color-scheme: light dark;
+    --font-size-h1: 32px;
+    --font-size-h2: 26px;
+    --font-size-h3: 20px;
+    --font-size-h4: 16px;
+    --font-size-x-large: 15px;
+    --font-size-large: 14px;
+    --font-size-medium: 13px;
+    --font-size-small: 12px;
+    --font-size-x-small: 11px;
+    --line-height-default: 1.25;
+    --line-height-comfortable: 1.5;
+    --font-family-sans-serif: 'FiraGO', sans-serif;
+    --font-family-monospace: 'Menlo', 'Noto Mono', monospace;
+    --icon-font-family: 'Material Symbols Outlined';
+    --icon-size-large: 24px;
+    --icon-size-medium: 20px;
+    --icon-size-small: 16px;
+    --global-header-height: 48px;
+    --global-header-z-index: 100;
+    --primary-region-border-radius: 4px;
+    --menu-border-radius: 4px;
+    --menu-padding: 6px;
+    --menuitem-border-radius: 6px;
+    --menuitem-padding: 4px 12px;
+    --menuitem-padding-touch: 6px 12px;
+    --control-border-radius: 4px;
+    --control-padding: 6px;
+    --button-border-radius: 4px;
+    --button-padding: 6px 12px;
+    --button-center-padding: 6px;
+    --application-header-foreground-color: rgb(200, 201, 202);
+    --application-header-background-color: rgb(50, 51, 52);
+    --application-header-hovered-button-foreground-color: rgb(240, 241, 242);
+    --application-header-hovered-button-background-color: rgb(60, 61, 62);
+    --application-header-input-foreground-color: rgb(240, 241, 242);
+    --application-header-input-background-color: rgb(70, 71, 72);
+    
+    --primary-region-background-color: rgb(250, 251, 252);
+    --primary-region-box-shadow: 0 1px 4px rgba(40, 41, 42, .2);
+
+    --application-foreground-color: rgb(40, 41, 42);
+    --application-background-color: rgb(235, 236, 237);
+    --scrollbar-color: rgb(190, 191, 192) var(--application-background-color);
+
+    --bug-status-color-open: #188716;
+    --bug-status-color-closed: #1B6AB8;
+    --bug-status-color-untriaged: #1B9BB8;
+    --bug-type-color-defect: #EA3C3D;
+    --bug-type-color-enhancement: #2ABA27;
+    --bug-type-color-task: #2886C9;
+    --grid-header-background-color: rgb(230, 231, 232);
+    --grid-background-color: var(--primary-region-background-color);
+
+    --accent-color-blue-1: 0, 108, 191;
+    --control-border-color: rgb(200, 201, 202);
+
+    --grid-border-color: var(--control-border-color);
+    --link-text-color: rgb(var(--accent-color-blue-1));
+
+    --primary-text-color: var(--application-foreground-color);
+    --primary-text-background-color: var(--primary-region-background-color);
+}
+
+body {
+    color: var(--application-foreground-color);
+    background: var(--application-background-color);
+    scrollbar-color: var(--scrollbar-color);
+}
+
+#bugzilla-body {
+    margin: 16px;
+}
+
+a {
+    color: var(--link-text-color);
+    text-decoration: none;
+}
+
+th {
+    white-space: nowrap;
+}
+
+.bz_comment_text {
+    overflow: auto;
+    padding: 12px;
+    color: var(--primary-text-color);
+    background: var(--primary-text-background-color);
+    font-size: var(--font-size-x-large);
+    line-height: var(--line-height-comfortable);
+}
+
+.bz_comment_text:not(.markdown-body) {
+    margin: 0;
+    font-size-adjust: .5;
+    font-family: var(--font-family-monospace);
+    white-space: pre-wrap;
+}
