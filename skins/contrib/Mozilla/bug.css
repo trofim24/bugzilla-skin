@@ -1,1 +1,3 @@
-
+.search-nav-disabled {
+    color: var(--disabled-control-foreground-color);
+}

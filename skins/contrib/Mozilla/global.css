@@ -43,6 +43,8 @@
     --application-foreground-color: rgb(40, 41, 42);
     --application-background-color: rgb(235, 236, 237);
     --scrollbar-color: rgb(190, 191, 192) var(--application-background-color);
+    
+    --disabled-control-foreground-color: rgb(160, 161, 162);
 
     --bug-status-color-open: #188716;
     --bug-status-color-closed: #1B6AB8;
@@ -54,10 +56,14 @@
     --grid-background-color: var(--primary-region-background-color);
 
     --accent-color-blue-1: 0, 108, 191;
+    --accent-color-blue-2: 0, 94, 166;
+    --accent-color-purple-1: 146, 72, 200;
     --control-border-color: rgb(200, 201, 202);
 
     --grid-border-color: var(--control-border-color);
     --link-text-color: rgb(var(--accent-color-blue-1));
+    --hovered-link-text-color: rgb(var(--accent-color-blue-2));
+    --visited-link-text-color: rgb(var(--accent-color-purple-1));
 
     --primary-text-color: var(--application-foreground-color);
     --primary-text-background-color: var(--primary-region-background-color);
@@ -76,6 +82,15 @@ body {
 a {
     color: var(--link-text-color);
     text-decoration: none;
+}
+
+a:hover, a:focus, a:active {
+    color: var(--hovered-link-text-color);
+    text-decoration: underline;
+}
+
+a:visited {
+    color: var(--visited-link-text-color);
 }
 
 th {
