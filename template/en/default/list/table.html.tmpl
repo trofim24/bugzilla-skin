@@ -50,8 +50,8 @@
     "dependson"         => { maxlength => 0, wrap => 1 } ,
     "blocked"           => { maxlength => 0, wrap => 1 } ,
     "flagtypes.name"    => { maxlength => 0, wrap => 1 } ,
-    "component"         => { maxlength => 20 , title => "Component" } , 
-    "product"           => { maxlength => 20 } , 
+    "component"         => { maxlength => 8 , title => "Comp" } , 
+    "product"           => { maxlength => 8 } , 
     "version"           => { maxlength => 5 , title => "Vers" } , 
     "op_sys"            => { maxlength => 12 } ,
     "bug_file_loc"      => { maxlength => 30 } , 
@@ -71,7 +71,7 @@
 
 [% tableheader = BLOCK %]
   <table class="bz_buglist">
-    <thead><tr class="bz_buglist_header bz_first_buglist_header">
+    <tr class="bz_buglist_header bz_first_buglist_header">
       [% IF dotweak %]
       <th>&nbsp;</th>
       [% END %]
@@ -114,7 +114,7 @@
 
       [% END %]
 
-    </tr></thead>
+    </tr>
 [% END %]
 
 [% BLOCK columnheader %]
@@ -265,22 +265,3 @@
     [% END %]
   </tr>
 [% END %]
-
-<script>
-window.addEventListener('load', function() {
-  document.querySelectorAll('tr.bz_bugitem').forEach(function(row) {
-
-    var premiumCell = row.querySelector('td.bz_cf_premium_column');
-    var needReleaseCell = row.querySelector('td.bz_cf_nfr_column');
-
-    if (premiumCell && premiumCell.textContent.trim() === 'Yes') {
-      row.style.backgroundColor = '#fff3b3'; // нежно-жёлтый фон для Premium user
-    }
-
-    if (needReleaseCell && needReleaseCell.textContent.trim() === 'Yes') {
-      row.style.backgroundColor = '#ffcccc'; // светло-красный фон для Need for release
-    }
-
-  });
-});
-</script>
