@@ -97,18 +97,26 @@ th {
     white-space: nowrap;
 }
 
-.bz_comment_text {
-    overflow: auto;
-    padding: 12px;
-    color: var(--primary-text-color);
-    background: var(--primary-text-background-color);
-    font-size: var(--font-size-x-large);
-    line-height: var(--line-height-comfortable);
+.bz_comment {
+    background-color: #e8e8e8;
+    margin: 1px 1px 10px 1px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #c8c8ba;
+    padding: 5px;
+    font-size: 9pt;
 }
 
-.bz_comment_text:not(.markdown-body) {
+.bz_comment_head, .bz_first_comment_head {
     margin: 0;
-    font-size-adjust: .5;
-    font-family: var(--font-family-monospace);
-    white-space: pre-wrap;
+    padding: 0;
+    background-color: transparent;
+    font-weight: bold;
+}
+
+.tabs td.spacer {
+    background: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
 }
