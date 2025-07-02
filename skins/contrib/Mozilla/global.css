@@ -3125,6 +3125,18 @@ body {
     margin-right: 10px;
 }
 
+.tabs td {
+  border-style: none;
+}
+
+.tabs td.spacer {
+  background: transparent;
+}
+
+.tabs td.selected {
+  border-width: 4px;
+}
+
 /**
  * From index.css
  */
