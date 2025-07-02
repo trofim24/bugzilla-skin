@@ -519,14 +519,6 @@
             <span class="label" role="none">New Bug</span>
           </a>
         </li>
-        [% IF user.id %]
-        <li role="none">
-          <a class="header-button" href="/page.cgi?id=mydashboard.html" title="Show My Dashboard" role="menuitem">
-            <span class="icon" aria-hidden="true" data-icon="dashboard"></span>
-            <span class="label" role="none">My Dashboard</span>
-          </a>
-        </li>
-        [% END %]
       </ul>
       <div class="dropdown" role="none">
         <button type="button" id="header-tools-menu-button" class="header-button dropdown-button minor" title="More tools…" role="menuitem" aria-label="Show More Tools Menu" aria-expanded="false" aria-haspopup="true" aria-controls="header-tools-menu">
@@ -586,18 +578,14 @@
           </div>
         </li>
         <li role="separator"></li>
+        [% IF user.in_group('admin') %]
         <li role="none">
-          <a href="/user_profile?user_id=[% user.id %]" role="menuitem">
-            <span class="icon" aria-hidden="true" data-icon="account_circle"></span>
-            <span class="label" role="none">My Profile</span>
+          <a href="/admin.cgi" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="admin_panel_settings"></span>
+            <span class="label" role="none">Administration</span>
           </a>
         </li>
-        <li role="none">
-          <a href="/page.cgi?id=user_activity.html&amp;action=run&amp;who=[% user.login FILTER uri %]" role="menuitem">
-            <span class="icon" aria-hidden="true" data-icon="timeline"></span>
-            <span class="label" role="none">My Activity</span>
-          </a>
-        </li>
+        [% END %]
         <li role="none">
           <a href="/userprefs.cgi" role="menuitem">
             <span class="icon" aria-hidden="true" data-icon="settings"></span>
