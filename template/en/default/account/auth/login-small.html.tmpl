@@ -17,65 +17,36 @@
  [% login_target = "index.cgi" %]
 [% END %]
 
-<li id="mini_login_container[% qs_suffix %]">
-  <span class="separator">| </span>
+<li id="mini_login_container[% qs_suffix %]" role="none">
   [% connector = "?" %]
   [% IF cgi.request_method == "GET" AND cgi.query_string %]
     [% connector = "&" %]
   [% END %]
   [% script_url = login_target _ connector _ "GoAheadAndLogIn=1" %]
-  <a id="login_link[% qs_suffix %]" href="[% script_url FILTER html %]"
-     onclick="return show_mini_login_form('[% qs_suffix %]')">Log In</a>
+  <a id="login_link[% qs_suffix %]" href="[% script_url FILTER html %]" class="show_mini_login_form header-button" data-qs-suffix="[% qs_suffix %]" role="button">
+    <span class="icon" aria-hidden="true" data-icon="login"></span>
+    <span class="label" role="none">Log In</span>
+  </a>
 
-  <form action="[% login_target FILTER html %]" method="POST"
-        class="mini_login bz_default_hidden"
-        id="mini_login[% qs_suffix FILTER html %]">
-    <input id="Bugzilla_login[% qs_suffix FILTER html %]" required
-           name="Bugzilla_login" class="bz_login"
-      [% IF login_not_email %]
-        placeholder="Login"
-      [% ELSE %]
-        type="email" placeholder="Email Address"
-      [% END %]>
-    <input class="bz_password" name="Bugzilla_password" type="password"
-           id="Bugzilla_password[% qs_suffix FILTER html %]" required
-           placeholder="Password">
-    [% IF Param('rememberlogin') == 'defaulton' ||
-          Param('rememberlogin') == 'defaultoff' %]
-      <input type="checkbox" id="Bugzilla_remember[% qs_suffix %]" 
-             name="Bugzilla_remember" value="on" class="bz_remember"
-             [%+ "checked" IF Param('rememberlogin') == "defaulton" %]>
-      <label for="Bugzilla_remember[% qs_suffix %]">Remember</label>
-    [% END %]
-    <input type="hidden" name="Bugzilla_login_token"
-           value="[% get_login_request_token() FILTER html %]">
-    <input type="submit" name="GoAheadAndLogIn" value="Log in"
-            id="log_in[% qs_suffix %]">
-    <a href="#" onclick="return hide_mini_login_form('[% qs_suffix %]')">[x]</a>
-  </form>
+  <div id="mini_login_top" class="mini-popup mini_login bz_default_hidden">
+    <form action="/" method="POST" data-qs-suffix="[% qs_suffix %]">
+      <input id="Bugzilla_login[% qs_suffix FILTER html %]" class="bz_login" name="Bugzilla_login" title="Login" placeholder="Email" aria-label="Email" type="email" required="">
+      <input class="bz_password" id="Bugzilla_password[% qs_suffix FILTER html %]" name="Bugzilla_password" type="password" title="Password" placeholder="Password" aria-label="Password" required="">
+      <input class="bz_password bz_default_hidden bz_mini_login_help" type="text" id="Bugzilla_password_dummy[% qs_suffix FILTER html %]" value="password" title="Password">
+      <span class="remember-outer">
+        <input type="checkbox" id="Bugzilla_remember[% qs_suffix FILTER html %]" name="Bugzilla_remember" value="on" class="bz_remember" checked="">
+        <label for="Bugzilla_remember[% qs_suffix FILTER html %]">Remember me</label>
+      </span>
+      <input type="hidden" name="Bugzilla_login_token" value="[% get_login_request_token() FILTER html %]">
+      <input type="submit" name="GoAheadAndLogIn" value="Log In" id="log_in[% qs_suffix FILTER html %]" class="check_mini_login_fields" data-qs-suffix="[% qs_suffix %]">
+      <a href="#" id="hide_mini_login[% qs_suffix FILTER html %]" aria-label="Close" class="close-button hide_mini_login_form" data-qs-suffix="[% qs_suffix %]">
+        <span class="icon" aria-hidden="true" data-icon="close"></span>
+      </a>
+    </form>
+    <div class="footer">
+      <a id="forgot_link[% qs_suffix FILTER html %]" href="/index.cgi?GoAheadAndLogIn=1#forgot" class="show_forgot_form" data-qs-suffix="[% qs_suffix %]">Forgot Password</a>
+    </div>
+  </div>
 </li>
 
 [% Hook.process('additional_methods') %]
-
-[% IF user.authorizer.can_change_password %]
-  <li id="forgot_container[% qs_suffix %]">
-    <span class="separator">| </span>
-    <a id="forgot_link[% qs_suffix %]" href="[% script_url FILTER html %]#forgot"
-       onclick="return show_forgot_form('[% qs_suffix %]')">Forgot Password</a>
-    <form action="token.cgi" method="post" id="forgot_form[% qs_suffix %]"
-          class="mini_forgot bz_default_hidden">
-      <label for="login[% qs_suffix FILTER html %]">Login:</label>
-      <input name="loginname" size="20" id="login[% qs_suffix FILTER html %]" required
-        [% IF login_not_email %]
-          placeholder="Your Login"
-        [% ELSE %]
-          type="email" placeholder="Your Email Address"
-        [% END %]>
-      <input id="forgot_button[% qs_suffix %]" value="Reset Password" type="submit">
-      <input type="hidden" name="a" value="reqpw">
-      <input type="hidden" id="token[% qs_suffix FILTER html %]" name="token"
-             value="[% issue_hash_token(['reqpw']) FILTER html %]">
-      <a href="#" onclick="return hide_forgot_form('[% qs_suffix %]')">[x]</a>
-    </form>
-  </li>
-[% END %]
