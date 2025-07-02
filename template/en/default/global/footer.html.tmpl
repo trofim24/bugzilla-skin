@@ -12,15 +12,15 @@
   #%]
 
       [% Hook.process('main-end') %]
-    </div>
+</div> 
+</main> 
+</div> 
 
-    <div id="footer">
-      <div class="intro">[% Hook.process('intro') %]</div>
-
-      [% PROCESS "global/useful-links.html.tmpl" %]
-
-      <div class="outro">[% Hook.process('outro') %]</div>
-    </div>
+<footer id="footer" role="contentinfo">
+  <div class="inner">
+    <p>Bugzilla [% constants.BUGZILLA_VERSION FILTER html %]</p>
+  </div>
+</footer>
 
     [% Hook.process("end") %]
   </body>

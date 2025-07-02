@@ -3104,6 +3104,100 @@ div.bz_comment_text pre {
   }
 }
 
+/**
+ * Self additions
+ */
+
 #header .links {
     border: none;
+}
+
+body {
+    background-image: none;
+}
+
+.label {
+    font-weight: normal;
+}
+
+#footer .inner p {
+    text-align: right;
+    margin-right: 10px;
+}
+
+/**
+ * From index.css
+ */
+
+#welcome-admin a {
+  font-weight: bold;
+}
+
+#welcome,
+.options {
+  margin: 64px 0 0;
+}
+
+#welcome {
+  text-align: center;
+}
+
+#welcome h1 {
+  margin: 0;
+}
+
+#welcome p {
+  margin: 8px 0 0;
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  border-top: 1px solid var(--secondary-region-border-color);
+  border-bottom: 1px solid var(--secondary-region-border-color);
+  max-width: 600px;
+}
+
+.option {
+  display: flex;
+  gap: 20px;
+}
+
+.option .icon img,
+.option .icon svg {
+  width: 48px;
+  height: 48px;
+}
+
+.option .icon svg path {
+  fill: var(--application-foreground-color);
+}
+
+.option .title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.option .title a,
+.option .title a:visited {
+  color: var(--application-foreground-color);
+}
+
+.option .desc-container {
+  flex-grow: 1;
+}
+
+@media screen and (width < 768px) {
+  #welcome,
+  .options {
+    margin: 48px 0 0;
+  }
 }
