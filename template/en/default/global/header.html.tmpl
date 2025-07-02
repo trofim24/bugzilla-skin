@@ -194,6 +194,56 @@
         [% IF javascript %]
           [% javascript %]
         [% END %]
+
+        // Dropdown menu functionality
+        function initDropdowns() {
+            var dropdownButtons = document.querySelectorAll('.dropdown-button');
+            
+            dropdownButtons.forEach(function(button) {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    var isExpanded = button.getAttribute('aria-expanded') === 'true';
+                    var dropdown = button.nextElementSibling;
+                    
+                    // Close all other dropdowns
+                    dropdownButtons.forEach(function(otherButton) {
+                        if (otherButton !== button) {
+                            otherButton.setAttribute('aria-expanded', 'false');
+                            var otherDropdown = otherButton.nextElementSibling;
+                            if (otherDropdown) {
+                                otherDropdown.style.display = 'none';
+                            }
+                        }
+                    });
+                    
+                    // Toggle current dropdown
+                    if (isExpanded) {
+                        button.setAttribute('aria-expanded', 'false');
+                        dropdown.style.display = 'none';
+                    } else {
+                        button.setAttribute('aria-expanded', 'true');
+                        dropdown.style.display = 'block';
+                    }
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown')) {
+                    dropdownButtons.forEach(function(button) {
+                        button.setAttribute('aria-expanded', 'false');
+                        var dropdown = button.nextElementSibling;
+                        if (dropdown) {
+                            dropdown.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        }
+        
+        YAHOO.util.Event.onDOMReady(initDropdowns);
     // -->
     </script>
 
