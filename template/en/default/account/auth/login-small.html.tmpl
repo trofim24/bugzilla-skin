@@ -44,8 +44,20 @@
       </a>
     </form>
     <div class="footer">
-      <a id="forgot_link[% qs_suffix FILTER html %]" href="/index.cgi?GoAheadAndLogIn=1#forgot" class="show_forgot_form" data-qs-suffix="[% qs_suffix %]">Forgot Password</a>
+      <a id="forgot_link[% qs_suffix FILTER html %]" href="#" class="show_forgot_form" data-qs-suffix="[% qs_suffix %]">Forgot Password</a>
     </div>
+  </div>
+
+  <div id="forgot_form[% qs_suffix FILTER html %]" class="mini-popup mini_forgot bz_default_hidden">
+    <form action="/token.cgi" method="post">
+      <input type="email" name="loginname" size="20" placeholder="Email" aria-label="Email" required="">
+      <input id="forgot_button[% qs_suffix FILTER html %]" value="Reset Password" type="submit">
+      <input type="hidden" name="a" value="reqpw">
+      <input type="hidden" id="token[% qs_suffix FILTER html %]" name="token" value="[% get_login_request_token() FILTER html %]">
+      <a href="#" class="close-button hide_forgot_form" aria-label="Close" data-qs-suffix="[% qs_suffix %]">
+        <span class="icon" aria-hidden="true"></span>
+      </a>
+    </form>
   </div>
 </li>
 

@@ -317,6 +317,45 @@
             return false; // Prevent default link behavior
         }
 
+        // Mini forgot form functionality
+        function show_forgot_form(suffix) {
+            var forgotForm = document.getElementById('forgot_form' + suffix);
+            var miniLogin = document.getElementById('mini_login_top');
+            
+            if (forgotForm) {
+                // Hide the mini login form
+                if (miniLogin) {
+                    miniLogin.classList.add('bz_default_hidden');
+                }
+                
+                // Show the forgot form
+                forgotForm.classList.remove('bz_default_hidden');
+                
+                // Focus on the email field
+                var emailField = forgotForm.querySelector('input[name="loginname"]');
+                if (emailField) {
+                    emailField.focus();
+                }
+            }
+            return false; // Prevent default link behavior
+        }
+        
+        function hide_forgot_form(suffix) {
+            var forgotForm = document.getElementById('forgot_form' + suffix);
+            var miniLogin = document.getElementById('mini_login_top');
+            
+            if (forgotForm) {
+                // Hide the forgot form
+                forgotForm.classList.add('bz_default_hidden');
+                
+                // Show the mini login form
+                if (miniLogin) {
+                    miniLogin.classList.remove('bz_default_hidden');
+                }
+            }
+            return false; // Prevent default link behavior
+        }
+
         // Initialize mini login form handlers
         function initMiniLoginForm() {
             // Handle close button clicks
@@ -336,6 +375,26 @@
                     e.preventDefault();
                     var suffix = link.getAttribute('data-qs-suffix') || '_top';
                     show_mini_login_form(suffix);
+                });
+            });
+            
+            // Handle forgot password link clicks
+            var forgotLinks = document.querySelectorAll('.show_forgot_form');
+            forgotLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var suffix = link.getAttribute('data-qs-suffix') || '_top';
+                    show_forgot_form(suffix);
+                });
+            });
+            
+            // Handle forgot form close button clicks
+            var forgotCloseButtons = document.querySelectorAll('.hide_forgot_form');
+            forgotCloseButtons.forEach(function(button) {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var suffix = button.getAttribute('data-qs-suffix') || '_top';
+                    hide_forgot_form(suffix);
                 });
             });
         }
