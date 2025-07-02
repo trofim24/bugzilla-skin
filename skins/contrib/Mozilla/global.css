@@ -274,15 +274,15 @@
   }
 
   input[type="checkbox"]:checked {
-    background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M0 0h24v24H0z\" fill=\"none\"/><path fill=\"rgb(255, 255, 255)\" d=\"M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z\"/></svg>');
+    background-image: url('static/images/svg/icon1.svg');
   }
 
   input[type="checkbox"]:indeterminate {
-    background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path fill=\"rgb(255, 255, 255)\" d=\"M19 13H5v-2h14v2z\"/><path d=\"M0 0h24v24H0z\" fill=\"none\"/></svg>');
+    background-image: url('static/images/svg/icon2.svg');
   }
 
   select:not([multiple]):not([size]) {
-    background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" fill=\"rgb(160, 161, 162)\" viewBox=\"0 0 24 24\"><path d=\"M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z\"/><path fill=\"none\" d=\"M0 0h24v24H0V0z\"/></svg>');
+    background-image: url('static/images/svg/icon3.svg');
   }
 
   #private-bug-banner {
@@ -357,15 +357,15 @@
   }
 
   input[type="checkbox"]:checked {
-    background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M0 0h24v24H0z\" fill=\"none\"/><path fill=\"rgb(35, 36, 37)\" d=\"M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z\"/></svg>');
+    background-image: url('static/images/svg/icon4.svg');
   }
 
   input[type="checkbox"]:indeterminate {
-    background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path fill=\"rgb(35, 36, 37)\" d=\"M19 13H5v-2h14v2z\"/><path d=\"M0 0h24v24H0z\" fill=\"none\"/></svg>');
+    background-image: url('static/images/svg/icon5.svg');
   }
 
   select:not([multiple]):not([size]) {
-    background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path fill=\"rgb(90, 91, 92)\" d=\"M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z\"/><path fill=\"none\" d=\"M0 0h24v24H0V0z\"/></svg>');
+    background-image: url('static/images/svg/icon6.svg');
   }
 }
 
