@@ -244,6 +244,103 @@
         }
         
         YAHOO.util.Event.onDOMReady(initDropdowns);
+
+        // Menu drawer functionality
+        function initMenuDrawer() {
+            var openButton = document.getElementById('open-menu-drawer');
+            var closeButton = document.getElementById('close-menu-drawer');
+            var menuDrawer = document.getElementById('menu-drawer');
+            
+            if (openButton && closeButton && menuDrawer) {
+                // Open menu drawer
+                openButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    menuDrawer.removeAttribute('inert');
+                    menuDrawer.setAttribute('open', '');
+                    menuDrawer.showModal();
+                });
+                
+                // Close menu drawer
+                closeButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    menuDrawer.setAttribute('inert', '');
+                    menuDrawer.removeAttribute('open');
+                    menuDrawer.close();
+                });
+                
+                // Close menu drawer when clicking outside
+                menuDrawer.addEventListener('click', function(e) {
+                    if (e.target === menuDrawer) {
+                        menuDrawer.setAttribute('inert', '');
+                        menuDrawer.removeAttribute('open');
+                        menuDrawer.close();
+                    }
+                });
+                
+                // Close menu drawer with Escape key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && menuDrawer.hasAttribute('open')) {
+                        menuDrawer.setAttribute('inert', '');
+                        menuDrawer.removeAttribute('open');
+                        menuDrawer.close();
+                    }
+                });
+            }
+        }
+        
+        YAHOO.util.Event.onDOMReady(initMenuDrawer);
+
+        // Mini login form functionality
+        function show_mini_login_form(suffix) {
+            var miniLogin = document.getElementById('mini_login_top');
+            
+            if (miniLogin) {
+                // Show the mini login form
+                miniLogin.classList.remove('bz_default_hidden');
+                
+                // Focus on the email field
+                var emailField = document.getElementById('Bugzilla_login' + suffix);
+                if (emailField) {
+                    emailField.focus();
+                }
+            }
+            return false; // Prevent default link behavior
+        }
+        
+        function hide_mini_login_form(suffix) {
+            var miniLogin = document.getElementById('mini_login_top');
+            
+            if (miniLogin) {
+                // Hide the mini login form
+                miniLogin.classList.add('bz_default_hidden');
+            }
+            return false; // Prevent default link behavior
+        }
+
+        // Initialize mini login form handlers
+        function initMiniLoginForm() {
+            // Handle close button clicks
+            var closeButtons = document.querySelectorAll('.hide_mini_login_form');
+            closeButtons.forEach(function(button) {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var suffix = button.getAttribute('data-qs-suffix') || '_top';
+                    hide_mini_login_form(suffix);
+                });
+            });
+            
+            // Handle login link clicks
+            var loginLinks = document.querySelectorAll('.show_mini_login_form');
+            loginLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var suffix = link.getAttribute('data-qs-suffix') || '_top';
+                    show_mini_login_form(suffix);
+                });
+            });
+        }
+        
+        YAHOO.util.Event.onDOMReady(initMiniLoginForm);
     // -->
     </script>
 
@@ -307,7 +404,7 @@
       </ul>
     </div>
     <h1 id="header-title" class="title" role="none">
-      <a class="header-button" href="[% urlbase FILTER html %]home" title="Go to home page">
+      <a class="header-button" href="[% urlbase FILTER html %]" title="Go to home page">
         <span aria-label="Go to Bugzilla Home Page">[% terms.Bugzilla %]</span>
       </a>
     </h1>
@@ -459,12 +556,7 @@
     </div>
     [% ELSE %]
     <ul id="header-login" class="links" role="none">
-      <li id="mini_login_container_top" role="none">
-        <a id="login_link_top" href="/index.cgi?GoAheadAndLogIn=1" class="show_mini_login_form header-button" data-qs-suffix="_top" role="button">
-          <span class="icon" aria-hidden="true" data-icon="login"></span>
-          <span class="label" role="none">Log In</span>
-        </a>
-      </li>
+      [% PROCESS "account/auth/login-small.html.tmpl" qs_suffix="_top" %]
     </ul>
     [% END %]
   </div>
