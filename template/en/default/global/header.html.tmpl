@@ -216,51 +216,280 @@
   </head>
 
   <body [% IF onload %] onload="[% onload %]"[% END %]
-        class="[% urlbase.replace('^https?://','').replace('/$','').replace('[-~@:/.]+','-') FILTER css_class_quote %]
+        class="bugzilla-mozilla-org skin-standard bug_modal platform-MacIntel
                [% FOREACH class = bodyclasses %]
                  [%+ class FILTER css_class_quote %]
-               [% END %] yui-skin-sam">
+               [% END %]">
 
-  <div id="header">
-    [% INCLUDE global/banner.html.tmpl %]
+<div id="wrapper">
 
-    <div id="titles">
-      <span id="title">[% terms.Bugzilla %][% " &ndash; $header" IF header %]</span>
-
-      [% IF subheader %]
-        <span id="subtitle" class="subheader">[% subheader %]</span>
-      [% END %]
-
-      [% IF header_addl_info %]
-        <span id="information" class="header_addl_info">[% header_addl_info %]</span>
-      [% END %]
+<header id="header" role="banner" aria-label="Global Header">
+  <div class="inner" role="none">
+    <button type="button" class="iconic ghost" id="open-menu-drawer" aria-label="Open Site Menu">
+      <span class="icon" aria-hidden="true" data-icon="menu"></span>
+    </button>
+    <div id="header-external-links" class="dropdown" role="none">
+      <button type="button" id="header-external-menu-button" class="dropdown-button minor" aria-label="Show Mozilla Menu" aria-expanded="false" aria-haspopup="true" aria-controls="header-external-menu">
+        <img src="/images/moz-fav-one-color-white-rgb.svg" width="32" height="32" alt="">
+      </button>
+      <ul class="dropdown-content right" id="header-external-menu" role="menu" aria-label="Mozilla Menu" style="display:none;">
+        <li role="none">
+          <a href="https://www.mozilla.org/" role="menuitem">
+            <span class="label" role="none">Mozilla Home</span>
+          </a>
+        </li>
+        <li role="separator"></li>
+        <li role="none">
+          <a href="https://www.mozilla.org/privacy/websites/" role="menuitem">
+            <span class="label" role="none">Privacy</span>
+          </a>
+        </li>
+        <li role="none">
+          <a href="https://www.mozilla.org/privacy/websites/#cookies" role="menuitem">
+            <span class="label" role="none">Cookies</span>
+          </a>
+        </li>
+        <li role="none">
+          <a href="https://www.mozilla.org/about/legal/" role="menuitem">
+            <span class="label" role="none">Legal</span>
+          </a>
+        </li>
+      </ul>
     </div>
-
-    [% USE Bugzilla %]
-    [% IF Bugzilla.languages.size > 1 %]
-      <div id="lang_links_container" class="bz_default_hidden">
-        <ul class="links">
-          [% FOREACH lang = Bugzilla.languages.sort %]
-            <li>
-              [% IF NOT loop.first %]<span class="separator"> | </span>[% END %]
-              [% IF lang == current_language %]
-                <span class="lang_current">[% lang FILTER html FILTER upper %]</span>
-              [% ELSE %]
-                <a href="#" onclick="set_language('[% lang FILTER none %]');">
-                  [%- lang FILTER html FILTER upper %]</a>
-              [% END %]
-            </li>
+    <h1 id="header-title" class="title" role="none">
+      <a class="header-button" href="[% urlbase FILTER html %]home" title="Go to home page">
+        <span aria-label="Go to Bugzilla Home Page">[% terms.Bugzilla %]</span>
+      </a>
+    </h1>
+    <form id="header-search" class="quicksearch" action="/buglist.cgi" data-no-csrf="" role="search" aria-label="Search Bugs">
+      <button type="button" class="iconic ghost" id="show-searchbox" aria-label="Search Bugs">
+        <span class="icon" aria-hidden="true" data-icon="search"></span>
+      </button>
+      <div class="searchbox-outer dropdown" role="combobox" aria-label="Quick Search" aria-haspopup="listbox" aria-owns="header-search-dropdown" aria-expanded="false">
+        <span class="icon" aria-hidden="true" data-icon="search"></span>
+        <input id="quicksearch_top" class="dropdown-button" name="quicksearch" autocomplete="off" value="" accesskey="s" placeholder="Search Bugs" title="Enter a bug number or some search terms" role="searchbox" aria-controls="header-search-dropdown" aria-label="Search Terms" aria-expanded="false">
+        <div id="header-search-dropdown" class="dropdown-content dropdown-panel right" role="listbox" style="display: none;">
+          <div id="header-search-dropdown-wrapper" role="none">
+            [% IF user.queries.size %]
+              <section id="header-search-dropdown-saved" role="group" aria-label="Saved Searches">
+                <header role="none">
+                  <h2 aria-hidden="true">Saved Searches</h2>
+                  <a aria-label="Edit saved searches" href="/userprefs.cgi?tab=saved-searches">Edit</a>
+                </header>
+                <ul role="none">
+                  [% FOREACH query = user.queries %]
+                    <li role="none"><a role="option" href="/buglist.cgi?cmdtype=dorem&amp;remaction=run&amp;namedcmd=[% query.name FILTER uri %]&amp;sharer_id=[% query.user.id %]">[% query.name FILTER html %]</a></li>
+                  [% END %]
+                </ul>
+              </section>
+            [% END %]
+            <section id="header-search-dropdown-help" role="group" aria-label="Help">
+              <footer role="none">
+                <a href="/page.cgi?id=quicksearch.html">Quick Search Tips</a>
+                <a href="/query.cgi?format=advanced">Advanced Search</a>
+              </footer>
+            </section>
+          </div>
+        </div>
+      </div>
+    </form>
+    <nav id="header-nav" role="menubar" aria-label="Site Links">
+      <ul class="links" role="none">
+        <li role="none">
+          <a class="header-button" href="/describecomponents.cgi" title="Browse bugs by component" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="category"></span>
+            <span class="label" role="none">Browse</span>
+          </a>
+        </li>
+        <li role="none">
+          <a class="header-button" href="/query.cgi?format=advanced" title="Search bugs using various criteria" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="pageview"></span>
+            <span class="label" role="none">Advanced Search</span>
+          </a>
+        </li>
+        <li role="none">
+          <a class="header-button" href="/enter_bug.cgi" title="File a new bug" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="add_box"></span>
+            <span class="label" role="none">New Bug</span>
+          </a>
+        </li>
+        [% IF user.id %]
+        <li role="none">
+          <a class="header-button" href="/page.cgi?id=mydashboard.html" title="Show My Dashboard" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="dashboard"></span>
+            <span class="label" role="none">My Dashboard</span>
+          </a>
+        </li>
+        [% END %]
+      </ul>
+      <div class="dropdown" role="none">
+        <button type="button" id="header-tools-menu-button" class="header-button dropdown-button minor" title="More tools…" role="menuitem" aria-label="Show More Tools Menu" aria-expanded="false" aria-haspopup="true" aria-controls="header-tools-menu">
+          <span class="icon" aria-hidden="true" data-icon="more_horiz"></span>
+        </button>
+        <ul class="dropdown-content left" id="header-tools-menu" role="menu" aria-label="More Tools Menu" style="display:none;">
+          [% IF user.id %]
+          <li role="none">
+            <a href="/request.cgi?requester=[% user.login FILTER uri %]&amp;requestee=[% user.login FILTER uri %]&amp;do_union=1&amp;group=type&amp;action=queue" role="menuitem">
+              <span class="icon" aria-hidden="true" data-icon="inbox"></span>
+              <span class="label" role="none">My Requests</span>
+            </a>
+          </li>
           [% END %]
+          <li role="none">
+            <a href="/report.cgi" role="menuitem">
+              <span class="icon" aria-hidden="true" data-icon="analytics"></span>
+              <span class="label" role="none">Reports</span>
+            </a>
+          </li>
+          <li role="separator"></li>
+          <li role="none">
+            <a href="https://bmo.readthedocs.io/en/latest/" target="_blank" role="menuitem">
+              <span class="icon" aria-hidden="true" data-icon="help"></span>
+              <span class="label" role="none">Documentation</span>
+            </a>
+          </li>
         </ul>
       </div>
-    [% END %]
-
-    <div id="common_links">
-      [% PROCESS "global/common-links.html.tmpl" qs_suffix = "_top" %]
+    </nav>
+    [% IF user.id %]
+    <div id="header-requests" class="dropdown" role="none">
+      <button type="button" id="header-requests-menu-button" class="dropdown-button minor" title="Requests for You" aria-expanded="false" aria-haspopup="true" aria-controls="header-requests-menu" aria-label="Show Requests for You">
+        <span class="icon" aria-hidden="true"></span>
+      </button>
+      <section class="dropdown-content dropdown-panel left" id="header-requests-menu" role="menu" aria-label="Requests for You" style="display:none;">
+        <header role="none">
+          <h2 aria-hidden="true">Requests</h2>
+          <a href="/request.cgi?action=queue&amp;requestee=[% user.login FILTER uri %]&amp;group=type" class="see-all" aria-label="See All Requests">See All</a>
+        </header>
+        <div class="empty">You're all caught up!</div>
+      </section>
     </div>
+    <div id="header-account" class="dropdown" role="none">
+      <button type="button" id="header-account-menu-button" class="dropdown-button minor" title="Account" aria-label="Show Account Menu" aria-expanded="false" aria-haspopup="true" aria-controls="header-account-menu">
+        [% IF user.gravatar_id %]
+          <img src="https://secure.gravatar.com/avatar/[% user.gravatar_id %]?d=mm&amp;size=64" width="32" height="32" alt="">
+        [% ELSE %]
+          <img src="https://secure.gravatar.com/avatar/?d=mm&amp;size=64" width="32" height="32" alt="">
+        [% END %]
+      </button>
+      <ul class="dropdown-content left" id="header-account-menu" role="menu" aria-label="Account Menu" style="display:none;">
+        <li role="none">
+          <div class="account-label" role="none">
+            <div class="name" role="none">[% user.name || user.login.replace('@.*', '') FILTER html %]</div>
+            <div class="email" role="none">[% user.login FILTER html %]</div>
+          </div>
+        </li>
+        <li role="separator"></li>
+        <li role="none">
+          <a href="/user_profile?user_id=[% user.id %]" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="account_circle"></span>
+            <span class="label" role="none">My Profile</span>
+          </a>
+        </li>
+        <li role="none">
+          <a href="/page.cgi?id=user_activity.html&amp;action=run&amp;who=[% user.login FILTER uri %]" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="timeline"></span>
+            <span class="label" role="none">My Activity</span>
+          </a>
+        </li>
+        <li role="none">
+          <a href="/userprefs.cgi" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="settings"></span>
+            <span class="label" role="none">Preferences</span>
+          </a>
+        </li>
+        <li role="separator"></li>
+        <li role="none">
+          <a href="/index.cgi?logout=1" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="logout"></span>
+            <span class="label" role="none">Log out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    [% ELSE %]
+    <ul id="header-login" class="links" role="none">
+      <li id="mini_login_container_top" role="none">
+        <a id="login_link_top" href="/index.cgi?GoAheadAndLogIn=1" class="show_mini_login_form header-button" data-qs-suffix="_top" role="button">
+          <span class="icon" aria-hidden="true" data-icon="login"></span>
+          <span class="label" role="none">Log In</span>
+        </a>
+      </li>
+    </ul>
+    [% END %]
   </div>
+  <dialog id="menu-drawer" inert="" aria-label="Site Menu">
+    <div class="drawer-inner" role="none">
+      <div class="header" role="none">
+        <button type="button" class="iconic ghost" id="close-menu-drawer" aria-label="Close Site Menu">
+          <span class="icon" aria-hidden="true" data-icon="close"></span>
+        </button>
+      </div>
+      <ul role="menu" aria-label="Site Links">
+        <li role="none">
+          <a class="header-button" href="/describecomponents.cgi" title="Browse bugs by component" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="category"></span>
+            <span class="label" role="none">Browse</span>
+          </a>
+        </li>
+        <li role="none">
+          <a class="header-button" href="/query.cgi?format=advanced" title="Search bugs using various criteria" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="pageview"></span>
+            <span class="label" role="none">Advanced Search</span>
+          </a>
+        </li>
+        <li role="none">
+          <a class="header-button" href="/enter_bug.cgi" title="File a new bug" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="add_box"></span>
+            <span class="label" role="none">New Bug</span>
+          </a>
+        </li>
+        [% IF user.id %]
+        <li role="none">
+          <a class="header-button" href="/page.cgi?id=mydashboard.html" title="Show My Dashboard" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="dashboard"></span>
+            <span class="label" role="none">My Dashboard</span>
+          </a>
+        </li>
+        <li role="none">
+          <a href="/request.cgi?requester=[% user.login FILTER uri %]&amp;requestee=[% user.login FILTER uri %]&amp;do_union=1&amp;group=type&amp;action=queue" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="inbox"></span>
+            <span class="label" role="none">My Requests</span>
+          </a>
+        </li>
+        [% END %]
+        <li role="none">
+          <a href="/report.cgi" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="analytics"></span>
+            <span class="label" role="none">Reports</span>
+          </a>
+        </li>
+        <li role="separator"></li>
+        <li role="none">
+          <a href="https://bmo.readthedocs.io/en/latest/" target="_blank" role="menuitem">
+            <span class="icon" aria-hidden="true" data-icon="help"></span>
+            <span class="label" role="none">Documentation</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </dialog>
+</header> 
 
-  <div id="bugzilla-body">
+<main id="bugzilla-body" tabindex="-1">
+
+<aside id="message-container" role="complementary">
+  <noscript>
+    <div class="noscript">
+      <div class="inner">
+        <p>Please enable JavaScript in your browser to use all the features on this site.</p>
+      </div>
+    </div>
+  </noscript>
+</aside>
+
+<div id="main-inner">
+
     [% IF Param('announcehtml') %]
       [% Param('announcehtml') FILTER none %]
     [% END %]

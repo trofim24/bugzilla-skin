@@ -1,72 +1,254 @@
-:root {
-    color-scheme: light dark;
-    --font-size-h1: 32px;
-    --font-size-h2: 26px;
-    --font-size-h3: 20px;
-    --font-size-h4: 16px;
-    --font-size-x-large: 15px;
-    --font-size-large: 14px;
-    --font-size-medium: 13px;
-    --font-size-small: 12px;
-    --font-size-x-small: 11px;
-    --line-height-default: 1.25;
-    --line-height-comfortable: 1.5;
-    --font-family-sans-serif: 'FiraGO', sans-serif;
-    --font-family-monospace: 'Menlo', 'Noto Mono', monospace;
-    --icon-font-family: 'Material Symbols Outlined';
-    --icon-size-large: 24px;
-    --icon-size-medium: 20px;
-    --icon-size-small: 16px;
-    --global-header-height: 48px;
-    --global-header-z-index: 100;
-    --primary-region-border-radius: 4px;
-    --menu-border-radius: 4px;
-    --menu-padding: 6px;
-    --menuitem-border-radius: 6px;
-    --menuitem-padding: 4px 12px;
-    --menuitem-padding-touch: 6px 12px;
-    --control-border-radius: 4px;
-    --control-padding: 6px;
-    --button-border-radius: 4px;
-    --button-padding: 6px 12px;
-    --button-center-padding: 6px;
-    --application-header-foreground-color: rgb(200, 201, 202);
-    --application-header-background-color: rgb(50, 51, 52);
-    --application-header-hovered-button-foreground-color: rgb(240, 241, 242);
-    --application-header-hovered-button-background-color: rgb(60, 61, 62);
-    --application-header-input-foreground-color: rgb(240, 241, 242);
-    --application-header-input-background-color: rgb(70, 71, 72);
-    
-    --primary-region-background-color: rgb(250, 251, 252);
-    --primary-region-box-shadow: 0 1px 4px rgba(40, 41, 42, .2);
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: normal;
+  font-display: block;
+  /* Source: https://github.com/google/material-design-icons/tree/master/variablefont */
+  src: url('fonts/MaterialSymbolsOutlined.woff2') format('woff2');
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
 
-    --application-foreground-color: rgb(40, 41, 42);
-    --application-background-color: rgb(235, 236, 237);
-    --scrollbar-color: rgb(190, 191, 192) var(--application-background-color);
-    
-    --disabled-control-foreground-color: rgb(160, 161, 162);
+@media all {
+    :root {
+        color-scheme: light dark;
+        --font-size-h1: 32px;
+        --font-size-h2: 26px;
+        --font-size-h3: 20px;
+        --font-size-h4: 16px;
+        --font-size-x-large: 15px;
+        --font-size-large: 14px;
+        --font-size-medium: 13px;
+        --font-size-small: 12px;
+        --font-size-x-small: 11px;
+        --line-height-default: 1.25;
+        --line-height-comfortable: 1.5;
+        --font-family-sans-serif: 'FiraGO', sans-serif;
+        --font-family-monospace: 'Menlo', 'Noto Mono', monospace;
+        --icon-font-family: 'Material Symbols Outlined';
+        --icon-size-large: 24px;
+        --icon-size-medium: 20px;
+        --icon-size-small: 16px;
+        --global-header-height: 48px;
+        --global-header-z-index: 100;
+        --primary-region-border-radius: 4px;
+        --menu-border-radius: 4px;
+        --menu-padding: 6px;
+        --menuitem-border-radius: 6px;
+        --menuitem-padding: 4px 12px;
+        --menuitem-padding-touch: 6px 12px;
+        --control-border-radius: 4px;
+        --control-padding: 6px;
+        --button-border-radius: 4px;
+        --button-padding: 6px 12px;
+        --button-center-padding: 6px;
+        --application-header-foreground-color: rgb(200, 201, 202);
+        --application-header-background-color: rgb(50, 51, 52);
+        --application-header-hovered-button-foreground-color: rgb(240, 241, 242);
+        --application-header-hovered-button-background-color: rgb(60, 61, 62);
+        --application-header-input-foreground-color: rgb(240, 241, 242);
+        --application-header-input-background-color: rgb(70, 71, 72);
+        
+        --primary-region-background-color: rgb(250, 251, 252);
+        --primary-region-box-shadow: 0 1px 4px rgba(40, 41, 42, .2);
 
-    --bug-status-color-open: #188716;
-    --bug-status-color-closed: #1B6AB8;
-    --bug-status-color-untriaged: #1B9BB8;
-    --bug-type-color-defect: #EA3C3D;
-    --bug-type-color-enhancement: #2ABA27;
-    --bug-type-color-task: #2886C9;
-    --grid-header-background-color: rgb(230, 231, 232);
-    --grid-background-color: var(--primary-region-background-color);
+        --application-foreground-color: rgb(40, 41, 42);
+        --application-background-color: rgb(235, 236, 237);
+        --scrollbar-color: rgb(190, 191, 192) var(--application-background-color);
+        
+        --disabled-control-foreground-color: rgb(160, 161, 162);
 
-    --accent-color-blue-1: 0, 108, 191;
-    --accent-color-blue-2: 0, 94, 166;
-    --accent-color-purple-1: 146, 72, 200;
-    --control-border-color: rgb(200, 201, 202);
+        --bug-status-color-open: #188716;
+        --bug-status-color-closed: #1B6AB8;
+        --bug-status-color-untriaged: #1B9BB8;
+        --bug-type-color-defect: #EA3C3D;
+        --bug-type-color-enhancement: #2ABA27;
+        --bug-type-color-task: #2886C9;
+        --grid-header-background-color: rgb(230, 231, 232);
+        --grid-background-color: var(--primary-region-background-color);
 
-    --grid-border-color: var(--control-border-color);
-    --link-text-color: rgb(var(--accent-color-blue-1));
-    --hovered-link-text-color: rgb(var(--accent-color-blue-2));
-    --visited-link-text-color: rgb(var(--accent-color-purple-1));
+        --accent-color-blue-1: 0, 108, 191;
+        --accent-color-blue-2: 0, 94, 166;
+        --accent-color-purple-1: 146, 72, 200;
+        --control-border-color: rgb(200, 201, 202);
 
-    --primary-text-color: var(--application-foreground-color);
-    --primary-text-background-color: var(--primary-region-background-color);
+        --grid-border-color: var(--control-border-color);
+        --link-text-color: rgb(var(--accent-color-blue-1));
+        --hovered-link-text-color: rgb(var(--accent-color-blue-2));
+        --visited-link-text-color: rgb(var(--accent-color-purple-1));
+
+        --primary-text-color: var(--application-foreground-color);
+        --primary-text-background-color: var(--primary-region-background-color);
+    }
+}
+
+img {
+    vertical-align: top;
+}
+
+#wrapper {
+    padding-top: calc(var(--global-header-height) + var(--private-bug-banner-height, 0px));
+}
+
+#header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: var(--global-header-z-index);
+}
+
+#header {
+    height: var(--global-header-height);
+    color: var(--application-header-foreground-color);
+    background-color: var(--application-header-background-color);
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#header .inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 8px;
+    width: 100%;
+    max-width: 1024px;
+    height: var(--global-header-height);
+}
+
+#header a, #header a:visited, #header a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+
+#header .inner .header-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 0 8px;
+    height: 32px;
+}
+
+#header-title {
+    margin: 0 !important;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+#header .inner > * {
+    flex: none;
+}
+
+#header-search {
+    flex: auto !important;
+}
+
+#header-nav {
+    display: flex;
+    align-items: center;
+    margin: 0 !important;
+}
+
+#header-nav .links {
+    flex: none;
+    display: flex;
+    justify-content: flex-end;
+    font-size: 14px;
+}
+
+.label {
+    font-weight: normal;
+}
+
+ul.links {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+#header a, #header button, #header input {
+    outline: 0;
+}
+
+#header button {
+    padding: 0 !important;
+    color: inherit;
+}
+
+#header .dropdown-button {
+    display: block;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    box-shadow: none;
+}
+
+#header .links {
+    border: none;
+}
+
+#header .icon {
+    display: inline-block;
+    width: 24px;
+    opacity: .75;
+    font-size: var(--icon-size-medium);
+    line-height: 1;
+    font-family: var(--icon-font-family);
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+#header .icon::before {
+    content: attr(data-icon);
+}
+
+#header .searchbox-outer {
+    position: relative;
+    width: 100%;
+    height: 32px;
+}
+
+#header .searchbox-outer .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+}
+
+#header #quicksearch_top {
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 0 8px 0 32px;
+    width: 100%;
+    height: 100%;
+    color: var(--application-header-input-foreground-color);
+    background-color: var(--application-header-input-background-color);
+    box-shadow: none;
+    font-size: var(--font-size-large) !important;
+    line-height: 32px;
+    cursor: text;
+}
+
+@media screen and (768px <= width) {
+    #header #show-searchbox {
+        display: none;
+    }
+}
+
+@media screen and (1024px <= width) {
+    #menu-drawer, #open-menu-drawer {
+        display: none;
+    }
 }
 
 body {
