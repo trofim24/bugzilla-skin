@@ -11,7 +11,7 @@
 <script type="text/javascript">
 <!--
 function toggle_display(link) {
-    var table = document.getElementById("attachment_table");
+    var table = document.getElementById("attachments");
     var view_all = document.getElementById("view_all");
     var hide_obsolete_url_parameter = "&hide_obsolete=1";
     // Store current height for scrolling later
@@ -38,128 +38,201 @@ function toggle_display(link) {
 
     return false;
 }
+
+// expand/collapse module
+function slide_module(module, action, fast) {
+    if (!module.id)
+        return;
+    var latch = module.querySelector('.module-latch');
+    var spinner = module.querySelector('.module-spinner');
+    var content = module.querySelector('.module-content');
+    var duration = fast ? 0 : 200;
+
+    function slide_done() {
+        var is_visible = content.style.display !== 'none';
+        spinner.setAttribute('aria-expanded', is_visible);
+        spinner.setAttribute('aria-label', is_visible ? latch.dataset.labelExpanded : latch.dataset.labelCollapsed);
+    }
+
+    if (action == 'show') {
+        content.style.display = 'block';
+        slide_done();
+    }
+    else if (action == 'hide') {
+        content.style.display = 'none';
+        slide_done();
+    }
+    else {
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+        } else {
+            content.style.display = 'none';
+        }
+        slide_done();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // expand/collapse module
+    var moduleLatches = document.querySelectorAll('.module-latch');
+    for (var i = 0; i < moduleLatches.length; i++) {
+        moduleLatches[i].addEventListener('click', function(event) {
+            event.preventDefault();
+            var module = this.closest('.module');
+            slide_module(module);
+        });
+        
+        moduleLatches[i].addEventListener('keydown', function(event) {
+            // expand/collapse module with the enter or space key
+            if (event.keyCode === 13 || event.keyCode === 32) {
+                event.preventDefault();
+                var module = this.closest('.module');
+                slide_module(module);
+            }
+        });
+    }
+});
 //-->
 </script>
 
-<br>
-<table id="attachment_table">
-  <tr id="a0">
-    <th colspan="[% show_attachment_flags ? 3 : 2 %]" class="left">
-      Attachments
-    </th>
-  </tr>
-
-  [% count = 0 %]
-  [% obsolete_attachments = 0 %]
-  [% user_cache = template_cache.users %]
-
-  [% FOREACH attachment = attachments %]
-    [% count = count + 1 %]
-    [% IF !attachment.isprivate || user.is_insider || attachment.attacher.id == user.id %]
-      [% IF attachment.isobsolete %]
-        [% obsolete_attachments = obsolete_attachments + 1 %]
-      [% END %]
-      <tr id="a[% count %]" class="[% "bz_contenttype_" _ attachment.contenttype
-                     FILTER css_class_quote %]
-                 [% " bz_patch" IF attachment.ispatch %]
-                 [% " bz_private" IF attachment.isprivate %]
-                 [% " bz_tr_obsolete bz_default_hidden" 
-                     IF attachment.isobsolete %]">
-        <td>
-          [% IF attachment.datasize %]
-            <a href="attachment.cgi?id=[% attachment.id %]"
-               title="View the content of the attachment">
-          [% END %]
-          <b>[% attachment.description FILTER html FILTER obsolete(attachment.isobsolete) %]</b>
-          [% "</a>" IF attachment.datasize %]
-
-          <span class="bz_attach_extra_info">
-            [% IF attachment.datasize %]
-              ([% attachment.datasize FILTER unitconvert %],
-              [% IF attachment.ispatch %]
-                patch)
-              [% ELSE %]
-                [%+ attachment.contenttype FILTER html %])
-              [% END %]
-            [% ELSE %]
-              (<em>deleted</em>)
-            [% END %]
-
-            <br>
-            <a href="#attach_[% attachment.id %]"
-               title="Go to the comment associated with the attachment">
-              [%- attachment.attached FILTER time("%Y-%m-%d %H:%M %Z") %]</a>,
-
-            [%# No need to recreate the exact same template if we already have it. %]
-            [% attacher_id = attachment.attacher.id %]
-            [% UNLESS user_cache.$attacher_id %]
-              [% user_cache.$attacher_id = BLOCK %]
-                [% INCLUDE global/user.html.tmpl who = attachment.attacher %]
-              [% END %]
-            [% END %]
-            [% user_cache.$attacher_id FILTER none %]
-          </span>
-        </td>
-
-        [% IF show_attachment_flags %]
-          <td class="bz_attach_flags">
-            [% IF attachment.flags.size == 0 %]
-              <i>no flags</i>
-            [% ELSE %]
-              [% FOREACH flag = attachment.flags %]
-                [% IF user.id %]
-                  <span title="[% flag.setter.identity FILTER html %]">[% flag.setter.nick FILTER html %]</span>:
-                [% ELSIF flag.setter.name %]
-                  <span title="[% flag.setter.name FILTER html %]">[% flag.setter.nick FILTER html %]</span>:
-                [% ELSE %]
-                  [% flag.setter.nick FILTER html %]:
-                [% END %]
-                [%+ flag.type.name FILTER html %][% flag.status %]
-                [%+ IF flag.status == "?" && flag.requestee %]
-                  [% IF user.id %]
-                    (<span title="[% flag.requestee.identity FILTER html %]">[% flag.requestee.nick FILTER html %]</span>)
-                  [% ELSIF flag.requestee.name %]
-                    (<span title="[% flag.requestee.name FILTER html %]">[% flag.requestee.nick FILTER html %]</span>)
-                  [% ELSE %]
-                    ([% flag.requestee.nick FILTER html %])
-                  [% END %]
-                [% END %]<br>
-              [% END %]
-            [% END %]
-          </td>
+<section class="module" id="module-attachments">
+  <header id="module-attachments-header" class="module-header">
+    <div class="module-latch" data-label-expanded="Collapse Attachments section" data-label-collapsed="Expand Attachments section">
+      <div class="module-spinner" role="button" tabindex="0" aria-controls="module-attachments-content" aria-expanded="true" aria-labeledby="module-attachments-title" aria-describedby="module-attachments-subtitle"></div>
+      <h2 class="module-title" id="module-attachments-title">Attachments</h2>
+      <h3 class="module-subtitle" id="module-attachments-subtitle">
+        [% IF attachments.size %]
+          ([% attachments.size %] file[% "s" IF attachments.size != 1 %])
+        [% ELSE %]
+          (No files)
         [% END %]
+      </h3>
+    </div>
+  </header>
+  <div class="module-content" id="module-attachments-content">
+      <table role="table" class="responsive" id="attachments">
+        <tbody>
+          [% IF attachments.size %]
+            [% count = 0 %]
+            [% obsolete_attachments = 0 %]
+            [% user_cache = template_cache.users %]
 
-        <td>
-          <a href="attachment.cgi?id=[% attachment.id %]&amp;action=edit">Details</a>
-          [% IF attachment.ispatch && feature_enabled('patch_viewer') %]
-            | <a href="attachment.cgi?id=[% attachment.id %]&amp;action=diff">Diff</a>
+            [% FOREACH attachment = attachments %]
+              [% count = count + 1 %]
+              [% IF !attachment.isprivate || user.is_insider || attachment.attacher.id == user.id %]
+                [% IF attachment.isobsolete %]
+                  [% obsolete_attachments = obsolete_attachments + 1 %]
+                [% END %]
+                <tr data-attachment-id="[% attachment.id %]" class="[% " attach-patch" IF attachment.ispatch %]
+                          [% " bz_private" IF attachment.isprivate %]
+                          [% " bz_tr_obsolete bz_default_hidden" 
+                              IF attachment.isobsolete %]">
+                  <td class="attach-desc-td">
+                    <div class="attach-desc">
+                      [% IF attachment.datasize %]
+                        <a href="/attachment.cgi?id=[% attachment.id %]">
+                      [% END %]
+                      [% attachment.description FILTER html FILTER obsolete(attachment.isobsolete) %]
+                      [% "</a>" IF attachment.datasize %]
+                    </div>
+                    <div>
+                      <a href="#attach_[% attachment.id %]" class="attach-time activity-ref">
+                        <span class="rel-time" data-time="[% attachment.attached.epoch %]" title="[% attachment.attached FILTER time("%Y-%m-%d %H:%M %Z") %]">
+                          [% attachment.attached FILTER time("%Y-%m-%d %H:%M %Z") %]
+                        </span>
+                      </a>
+                      <span class="attach-author">
+                        [%# No need to recreate the exact same template if we already have it. %]
+                        [% attacher_id = attachment.attacher.id %]
+                        [% UNLESS user_cache.$attacher_id %]
+                          [% user_cache.$attacher_id = BLOCK %]
+                            [% INCLUDE global/user.html.tmpl who = attachment.attacher %]
+                          [% END %]
+                        [% END %]
+                        [% user_cache.$attacher_id FILTER none %]
+                      </span>
+                    </div>
+                    <div class="attach-info">
+                      [% IF attachment.datasize %]
+                        [% attachment.datasize FILTER unitconvert %],
+                        [% IF attachment.ispatch %]
+                          patch
+                        [% ELSE %]
+                          [%+ attachment.contenttype FILTER html %]
+                        [% END %]
+                      [% ELSE %]
+                        <em>deleted</em>
+                      [% END %]
+                    </div>
+                  </td>
+                  <td>
+                    [% IF show_attachment_flags %]
+                      [% IF attachment.flags.size == 0 %]
+                        <i>no flags</i>
+                      [% ELSE %]
+                        [% FOREACH flag = attachment.flags %]
+                          [% IF user.id %]
+                            <span title="[% flag.setter.identity FILTER html %]">[% flag.setter.nick FILTER html %]</span>:
+                          [% ELSIF flag.setter.name %]
+                            <span title="[% flag.setter.name FILTER html %]">[% flag.setter.nick FILTER html %]</span>:
+                          [% ELSE %]
+                            [% flag.setter.nick FILTER html %]:
+                          [% END %]
+                          [%+ flag.type.name FILTER html %][% flag.status %]
+                          [%+ IF flag.status == "?" && flag.requestee %]
+                            [% IF user.id %]
+                              (<span title="[% flag.requestee.identity FILTER html %]">[% flag.requestee.nick FILTER html %]</span>)
+                            [% ELSIF flag.requestee.name %]
+                              (<span title="[% flag.requestee.name FILTER html %]">[% flag.requestee.nick FILTER html %]</span>)
+                            [% ELSE %]
+                              ([% flag.requestee.nick FILTER html %])
+                            [% END %]
+                          [% END %]<br>
+                        [% END %]
+                      [% END %]
+                    [% END %]
+                  </td>
+                  <td class="attach-actions">
+                    <a href="/attachment.cgi?id=[% attachment.id %]&amp;action=edit" data-details="1">Details</a>
+                    [% IF attachment.ispatch && feature_enabled('patch_viewer') %]
+                      | <a href="/attachment.cgi?id=[% attachment.id %]&amp;action=diff">Diff</a>
+                    [% END %]
+                    [% IF attachment.ispatch && feature_enabled('splinter') %]
+                      | <a href="/page.cgi?id=splinter.html&amp;ignore=&amp;bug=[% bugid %]&amp;attachment=[% attachment.id %]">Splinter Review</a>
+                    [% END %]
+                    [% Hook.process("action") %]
+                  </td>
+                </tr>
+              [% END %]
+            [% END %]
           [% END %]
-          [% Hook.process("action") %]
-        </td>
-      </tr>
-    [% END %]
-  [% END %]
-
-  <tr class="bz_attach_footer">
-    <td colspan="[% show_attachment_flags ? 3 : 2 %]">
-      [% IF attachments.size %]
-        <span class="bz_attach_view_hide">
-          [% IF obsolete_attachments %]
-            <a href="#a0" onclick="return toggle_display(this);">Show
-              Obsolete</a> ([% obsolete_attachments %])
-          [% END %]
-          [% IF Param("allow_attachment_display") %]
-            <a id="view_all" href="attachment.cgi?bugid=
+          <tr>
+            <td class="attach-desc-td">
+              [% IF Param("maxattachmentsize") || Param("maxlocalattachment") %]
+                <a href="/attachment.cgi?bugid=[% bugid %]&amp;action=enter" id="attachments-add-link">
+                  <button type="button" role="none" id="attachments-add-btn" class="secondary">Attach New File</button>
+                </a>
+              [% END %]
+            </td>
+            [% IF attachments.size && Param("allow_attachment_display") %]
+              <td></td>
+              <td class="attach-actions">
+              <a id="view_all" href="/attachment.cgi?bugid=
                   [%- bugid %]&amp;action=viewall
                   [%- "&amp;hide_obsolete=1" IF obsolete_attachments %]">View All</a>
-          [% END %]
-        </span>
-      [% END %]
-      [% IF Param("maxattachmentsize") || Param("maxlocalattachment") %]
-        <a href="attachment.cgi?bugid=[% bugid %]&amp;action=enter">Add an attachment</a>
-        (proposed patch, testcase, etc.)
-      [% END %]
-    </td>
-  </tr>
-</table>
-<br>
+              </td>
+            [% END %]
+            [% IF attachments.size && obsolete_attachments %]
+              <td></td>
+              <td>
+                <span class="bz_attach_view_hide">
+                    <a href="#a0" onclick="return toggle_display(this);">Show
+                      Obsolete</a> ([% obsolete_attachments %])
+                </span>
+              </td>
+            [% END %]
+          </tr>
+        </tbody>
+      </table>
+  </div>
+</section>
