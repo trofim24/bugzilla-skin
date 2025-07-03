@@ -12,46 +12,34 @@
   </li>
 
   [%# Saved searches %]
+  <section id="saved_searches_container">
+    <header>
+      <h2 class="query_heading">Saved Searches</h2>
+      <a href="/userprefs.cgi?tab=saved-searches">Edit</a>
+    </header>
+    <ul>
+      [% IF user.showmybugslink %]
+        [% filtered_username = user.login FILTER uri %]
+        <li>
+          <a href="[% Param('mybugstemplate').replace('%userid%', filtered_username) %]">My [% terms.Bugs %]</a>
+        </li>
+      [% END %]
 
-  [% IF user.showmybugslink OR user.queries.size %]
-    <li id="links-saved">
-      <ul class="links">
-        [% print_pipe = 0 %]
-        [% IF user.showmybugslink %]
-          [% filtered_username = user.login FILTER uri %]
-          <li>
-            <a href="[% Param('mybugstemplate').replace('%userid%', filtered_username) %]">My [% terms.Bugs %]</a>
-          </li>
-          [% print_pipe = 1 %]
-        [% END %]
+      [% FOREACH q = user.queries %]
+        [% NEXT UNLESS q.link_in_footer %]
+        <li>
+          <a href="buglist.cgi?cmdtype=runnamed&amp;namedcmd=[% q.name FILTER uri %]">[% q.name FILTER html %]</a>
+        </li>
+      [% END %]
 
-        [% FOREACH q = user.queries %]
-          [% NEXT UNLESS q.link_in_footer %]
-          <li>
-            [% '<span class="separator">| </span>' IF print_pipe %]
-            <a href="buglist.cgi?cmdtype=runnamed&amp;namedcmd=[% q.name FILTER uri %]">[% q.name FILTER html %]</a>
-          </li>
-          [% print_pipe = 1 %]
-        [% END %]
-      </ul>
-    </li>
-  [% END %]
-
-  [% IF user.queries_subscribed.size %]
-    <li id="links-shared">
-      <ul class="links">
-        [% FOREACH q = user.queries_subscribed %]
-          <li>
-            [% '<span class="separator">| </span>' UNLESS loop.first %]
-            <a href="buglist.cgi?cmdtype=dorem&amp;remaction=run&amp;namedcmd=
-                     [%- q.name FILTER uri %]&amp;sharer_id=[% q.user.id FILTER uri %]"
-               class="shared" title="Shared by [% q.user.identity FILTER html %]">
-              [%- q.name FILTER html %]</a>
-          </li>
-        [% END %]
-      </ul>
-    </li>
-  [% END %]
+      [% FOREACH q = user.queries_subscribed %]
+        <li>
+          <a href="buglist.cgi?cmdtype=dorem&amp;remaction=run&amp;namedcmd=[% q.name FILTER uri %]&amp;sharer_id=[% q.user.id FILTER uri %]"
+             title="Shared by [% q.user.identity FILTER html %]">[% q.name FILTER html %]</a>
+        </li>
+      [% END %]
+    </ul>
+  </section>
 
   [% IF user.reports.size %]
     <li id="reports-saved">
