@@ -21,36 +21,136 @@
     [% Hook.process("links") %]
     <li>&nbsp;-&nbsp;<a href="#">Top of page </a></li>
     </ul>
-[% END %]
-
-[% SET my_search = user.recent_search_for(bug) %]
-[% IF my_search %]
-  <nav id="search-nav" aria-labelledby="search-nav-label">
-    [% SET last_bug_list = my_search.bug_list %]
-    [% SET this_bug_idx = lsearch(last_bug_list, bug.id) %]
-    <a id="search-nav-label" href="buglist.cgi?regetlastlist=[%- my_search.id FILTER uri %]">[% terms.Bug %] List</a>
-    ([% this_bug_idx + 1 %] of [% last_bug_list.size %])
-    [% IF this_bug_idx > 0 %]
-      <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.first FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">❰❰ First</a>
-    [% ELSE %]
-      <span class="search-nav-disabled">❰❰ First</span>
+[% ELSE %]
+  [% SET my_search = user.recent_search_for(bug) %]
+  <div role="toolbar" id="page-toolbar">
+    [% IF my_search %]
+      <nav id="search-nav" aria-labelledby="search-nav-label">
+        [% SET last_bug_list = my_search.bug_list %]
+        [% SET this_bug_idx = lsearch(last_bug_list, bug.id) %]
+        <a id="search-nav-label" href="buglist.cgi?regetlastlist=[%- my_search.id FILTER uri %]">[% terms.Bug %] List</a>
+        ([% this_bug_idx + 1 %] of [% last_bug_list.size %])
+        [% IF this_bug_idx > 0 %]
+          <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.first FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">❰❰ First</a>
+        [% ELSE %]
+          <span class="search-nav-disabled">❰❰ First</span>
+        [% END %]
+        [% IF this_bug_idx > 0 %]
+          [% prev_bug = this_bug_idx - 1 %]
+          <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.$prev_bug FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">❰ Prev</a>
+        [% ELSE %]
+          <span class="search-nav-disabled">❰ Prev</span>
+        [% END %]
+        [% IF this_bug_idx + 1 < last_bug_list.size %]
+          [% next_bug = this_bug_idx + 1 %]
+          <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.$next_bug FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">Next ❱</a>
+        [% ELSE %]
+          <span class="search-nav-disabled">Next ❱</span>
+        [% END %]
+        [% IF this_bug_idx + 1 < last_bug_list.size %]
+          <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.last FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">Last ❱❱</a>
+        [% ELSE %]
+          <span class="search-nav-disabled">Last ❱❱</span>
+        [% END %]
+      </nav>
     [% END %]
-    [% IF this_bug_idx > 0 %]
-      [% prev_bug = this_bug_idx - 1 %]
-      <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.$prev_bug FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">❰ Prev</a>
-    [% ELSE %]
-      <span class="search-nav-disabled">❰ Prev</span>
-    [% END %]
-    [% IF this_bug_idx + 1 < last_bug_list.size %]
-      [% next_bug = this_bug_idx + 1 %]
-      <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.$next_bug FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">Next ❱</a>
-    [% ELSE %]
-      <span class="search-nav-disabled">Next ❱</span>
-    [% END %]
-    [% IF this_bug_idx + 1 < last_bug_list.size %]
-      <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.last FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">Last ❱❱</a>
-    [% ELSE %]
-      <span class="search-nav-disabled">Last ❱❱</span>
-    [% END %]
-  </nav>
+    
+    <div role="group" class="buttons">
+      <button type="button" id="copy-summary" class="secondary separate-dropdown-button-main" title="Copy bug number and summary to your clipboard">Copy Summary</button>
+      <div id="copy-menu-dropdown" class="dropdown">
+        <button type="button" id="copy-menu-btn" aria-haspopup="true" aria-label="View" aria-expanded="false" aria-controls="copy-menu" class="dropdown-button secondary separate-dropdown-button-arrow" title="More options for copy">▾</button>
+        <ul class="dropdown-content left" id="copy-menu" role="menu" style="display:none;">
+          <li role="presentation">
+            <a id="copy-markdown-summary" role="menuitem" tabindex="-1">Markdown</a>
+          </li>
+          <li role="presentation">
+            <a id="copy-markdown-bug-number" role="menuitem" tabindex="-1">Markdown (bug number)</a>
+          </li>
+          <li role="presentation">
+            <a id="copy-text-summary" role="menuitem" tabindex="-1">Plain Text</a>
+          </li>
+          <li role="presentation">
+            <a id="copy-html-summary" role="menuitem" tabindex="-1">HTML</a>
+          </li>
+        </ul>
+      </div>
+      <div id="clip-container" style="display:none"><input type="text" id="clip"></div>
+      
+      <button type="button" class="secondary" id="cc-btn" data-is-cced="0">Follow</button>
+      
+      <div class="dropdown">
+        <button type="button" id="action-menu-btn" aria-haspopup="true" aria-label="View" aria-expanded="false" aria-controls="action-menu" class="dropdown-button secondary">View ▾</button>
+        <ul class="dropdown-content left" id="action-menu" role="menu" style="display:none;">
+          <li role="presentation">
+            <a id="action-enable-perm-edit" role="menuitemcheckbox" tabindex="-1">Always Enable Edit Mode</a>
+          </li>
+          <li role="separator"></li>
+          <li role="presentation">
+            <a id="action-reset" role="menuitem" tabindex="-1">Reset Sections</a>
+          </li>
+          <li role="presentation">
+            <a id="action-expand-all" role="menuitem" tabindex="-1">Expand All Sections</a>
+          </li>
+          <li role="presentation">
+            <a id="action-collapse-all" role="menuitem" tabindex="-1">Collapse All Sections</a>
+          </li>
+          <li role="separator"></li>
+          <li role="presentation">
+            <a id="action-history" role="menuitem" tabindex="-1">History</a>
+          </li>
+          <li role="separator"></li>
+          <li role="presentation">
+            <a href="/rest/bug/[% bug.bug_id FILTER uri %]" role="menuitem" tabindex="-1">JSON</a>
+          </li>
+          <li role="presentation">
+            <a href="show_bug.cgi?ctype=xml&amp;id=[% bug.bug_id FILTER uri %]" role="menuitem" tabindex="-1">XML</a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="dropdown">
+        <button type="button" id="new-bug-btn" aria-haspopup="true" aria-label="New/CloneBug" aria-expanded="false" aria-controls="new-bug-menu" class="dropdown-button secondary">
+          New/Clone ▾</button>
+        <ul class="dropdown-content left" id="new-bug-menu" role="menu" style="display:none;">
+          <li role="presentation">
+            <a href="enter_bug.cgi" role="menuitem" tabindex="-1" target="_blank">
+              Create a new bug</a>
+          </li>
+          <li role="presentation">
+            <a href="enter_bug.cgi?product=[% bug.product FILTER uri %]" role="menuitem" tabindex="-1" target="_blank">… in this product</a>
+          </li>
+          <li role="presentation">
+            <a href="enter_bug.cgi?product=[% bug.product FILTER uri %]&amp;component=[% bug.component FILTER uri %]" role="menuitem" tabindex="-1" target="_blank">… in this component</a>
+          </li>
+          <li role="separator"></li>
+          <li role="presentation">
+            <a href="enter_bug.cgi?format=__default__&amp;blocked=[% bug.bug_id FILTER uri %]&amp;product=[% bug.product FILTER uri %]&amp;component=[% bug.component FILTER uri %]" role="menuitem" tabindex="-1" target="_blank">… that blocks this bug</a>
+          </li>
+          <li role="presentation">
+            <a href="enter_bug.cgi?format=__default__&amp;dependson=[% bug.bug_id FILTER uri %]&amp;product=[% bug.product FILTER uri %]&amp;component=[% bug.component FILTER uri %]" role="menuitem" tabindex="-1" target="_blank">… that depends on this bug</a>
+          </li>
+          <li role="presentation">
+            <a href="enter_bug.cgi?format=__default__&amp;regressed_by=[% bug.bug_id FILTER uri %]&amp;product=[% bug.product FILTER uri %]&amp;component=[% bug.component FILTER uri %]" role="menuitem" tabindex="-1" target="_blank">… that is regressed by this bug</a>
+          </li>
+          <li role="separator"></li>
+          <li role="presentation">
+            <a href="enter_bug.cgi?format=__default__&amp;cloned_bug_id=[% bug.bug_id FILTER uri %]&amp;product=[% bug.product FILTER uri %]&amp;component=[% bug.component FILTER uri %]" role="menuitem" tabindex="-1" target="_blank">… as a clone of this bug</a>
+          </li>
+          <li role="presentation">
+            <a href="enter_bug.cgi?format=__default__&amp;cloned_bug_id=[% bug.bug_id FILTER uri %]" role="menuitem" tabindex="-1" target="_blank">… as a clone, in a different product</a>
+          </li>
+        </ul>
+      </div>
+      
+      <button type="button" id="cancel-btn" class="secondary" aria-label="Cancel Editing" style="display:none">Cancel</button>
+      <button type="button" id="mode-btn" class="primary">
+        <span id="mode-btn-readonly" title="Enable editing fields for bug metadata">Edit Bug</span>
+        <span id="mode-btn-loading">
+          <img id="edit-throbber" src="/extensions/BugModal/web/throbber.gif" width="16" height="11">
+          Fetching
+        </span>
+      </button>
+      <button type="submit" id="commit-btn" class="save-btn primary" style="display:none">Save Changes</button>
+    </div>
+  </div>
 [% END %]

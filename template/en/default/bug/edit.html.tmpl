@@ -56,6 +56,17 @@
           [%- product.classification.name FILTER js %]';
   [%- END %]
 [% END %]
+
+// show bug history
+document.addEventListener('DOMContentLoaded', function() {
+    var historyButton = document.getElementById('action-history');
+    if (historyButton) {
+        historyButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            window.open('show_activity.cgi?id=[% bug.bug_id FILTER js %]', '_blank');
+        });
+    }
+});
 //-->
 </script>
 
@@ -183,40 +194,55 @@
 [%############################################################################%]
 
 [% BLOCK section_title %]
-  [%# That's the main table, which contains all editable fields. %]
-  <div class="bz_short_desc_container edit_form">
-      [% PROCESS commit_button id="_top"%]
-     <a href="show_bug.cgi?id=[% bug.bug_id %]">
-        [%-# %]<b>[% terms.Bug %]&nbsp;[% bug.bug_id FILTER html %]</b>
-     [%-# %]</a> <span id="summary_container" class="bz_default_hidden">
-      [% IF bug.alias.size > 0 %]
-        (<span id="alias_nonedit_display">[% bug.alias.join(', ') FILTER html %]</span>)
-      [% END %]
-      - <span id="short_desc_nonedit_display">[% bug.short_desc FILTER quoteUrls(bug) %]</span>
-      [% can_edit_short_desc = bug.check_can_change_field('short_desc', 0, 1) %]
-      [% IF can_edit_short_desc %]
-        <small>(<a href="#" id="summary_edit_action">edit</a>)</small>
-      [% END %]
-     </span>
+  <section class="module">
+    <div class="module-content">
+      <div id="summary-container">
+        <div class="field bug_modal indent" id="field-status_summary">
+          <div class="container">
+            <span id="field-value-status_summary">
+              <span class="bug-status-label text" data-status="[% bug.bug_status.lower FILTER html %]">[% display_value("bug_status", bug.bug_status) FILTER html %]</span>
+              <span id="field-value-bug_id">
+                <a href="show_bug.cgi?id=[% bug.bug_id %]">[% terms.Bug %] [% bug.bug_id FILTER html %]</a>
+              </span>
+              <span class="bug-time-labels">
+                <span class="bug-time-label">Opened <span class="rel-time" data-time="[% bug.creation_ts.epoch %]" title="[% bug.creation_ts FILTER time("%Y-%m-%d %H:%M %Z") %]">[% bug.creation_ts FILTER time("%Y-%m-%d %H:%M %Z") %]</span></span>
+                [% IF bug.resolution %]
+                  <span class="bug-time-label">Closed <span class="rel-time" data-time="[% bug.delta_ts.epoch %]" title="[% bug.delta_ts FILTER time("%Y-%m-%d %H:%M %Z") %]">[% bug.delta_ts FILTER time("%Y-%m-%d %H:%M %Z") %]</span></span>
+                [% END %]
+              </span>
+            </span>
+          </div>
+        </div>
+        
+        <div class="field bug_modal indent edit-hide">
+          <div class="container">
+            <h1 id="field-value-short_desc">[% bug.short_desc FILTER html %]</h1>
+          </div>
+        </div>
 
-    <div id="summary_input">
-      [% INCLUDE "bug/field-label.html.tmpl"
-        field = bug_fields.short_desc
-        editable = can_edit_short_desc
-        accesskey = "s"
-        tag_name = 'span'
-      %]
-      [% PROCESS input inputname => "short_desc" size => "80"
-                       maxlength => 255 spellcheck => "true" no_td => 1 %]
+        <div class="field bug_modal edit-show" id="field-short_desc" style="display:none">
+          <div class="name">
+            [% can_edit_short_desc = bug.check_can_change_field('short_desc', 0, 1) %]
+            [% IF can_edit_short_desc %]
+              <span class="required_star edit-show" style="display:none" aria-label="Required Field">*</span> 
+              <a href="https://wiki.mozilla.org/BMO/UserGuide/BugFields#short_desc" id="short_desc-help-link" class="help">Summary:</a>
+            [% ELSE %]
+              Summary:
+            [% END %]
+          </div>
+          <div class="value">
+            <span id="field-value-short_desc">
+              [% IF can_edit_short_desc %]
+                [% PROCESS input inputname => "short_desc" size => "80" maxlength => 255 spellcheck => "true" no_td => 1 %]
+              [% ELSE %]
+                [% bug.short_desc FILTER html %]
+              [% END %]
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <script type="text/javascript">
-    hideEditableField('summary_container',
-                      'summary_input',
-                      'summary_edit_action',
-                      'short_desc',
-                      '[% bug.short_desc FILTER js %]' );
-  </script>
+  </section>
 [% END %]
 
 [%############################################################################%]
