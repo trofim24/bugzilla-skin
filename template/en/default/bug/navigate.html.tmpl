@@ -25,48 +25,32 @@
 
 [% SET my_search = user.recent_search_for(bug) %]
 [% IF my_search %]
-  <div class="navigation">
-  [% SET last_bug_list = my_search.bug_list %]
-  [% SET this_bug_idx = lsearch(last_bug_list, bug.id) %]
-  <b>[% terms.Bug %] List:</b>
-
-  ([% this_bug_idx + 1 %] of [% last_bug_list.size %])
-
-  [% IF this_bug_idx > 0 %]
-    <a href="show_bug.cgi?id=
-             [%- last_bug_list.first FILTER uri %]&amp;list_id=
-             [%- my_search.id FILTER uri %]">First</a>
-  [% ELSE %]
-    <span class="navigation_link">First</span>
-  [% END %]
-
-  [% IF this_bug_idx + 1 < last_bug_list.size %]
-    <a href="show_bug.cgi?id=
-             [%- last_bug_list.last FILTER uri %]&amp;list_id=
-             [%- my_search.id FILTER uri %]">Last</a>
-  [% ELSE %]
-    <span class="navigation_link">Last</span>
-  [% END %]
-
-  [% IF this_bug_idx > 0 %]
-    [% prev_bug = this_bug_idx - 1 %]
-    <a href="show_bug.cgi?id=
-             [%- last_bug_list.$prev_bug FILTER uri %]&amp;list_id=
-             [%- my_search.id FILTER uri %]">Prev</a>
-  [% ELSE %]
-    <span class="navigation_link">Prev</span>
-  [% END %]
-
-  [% IF this_bug_idx + 1 < last_bug_list.size %]
-    [% next_bug = this_bug_idx + 1 %]
-    <a href="show_bug.cgi?id=
-             [%- last_bug_list.$next_bug FILTER uri %]&amp;list_id=
-             [%- my_search.id FILTER uri %]">Next</a>
-  [% ELSE %]
-    <span class="navigation_link">Next</span>
-  [% END %]
-
-  &nbsp;&nbsp;<a href="buglist.cgi?regetlastlist=
-              [%- my_search.id FILTER uri %]">Show last search results</a>
-  </div>
+  <nav id="search-nav" aria-labelledby="search-nav-label">
+    [% SET last_bug_list = my_search.bug_list %]
+    [% SET this_bug_idx = lsearch(last_bug_list, bug.id) %]
+    <a id="search-nav-label" href="buglist.cgi?regetlastlist=[%- my_search.id FILTER uri %]">[% terms.Bug %] List</a>
+    ([% this_bug_idx + 1 %] of [% last_bug_list.size %])
+    [% IF this_bug_idx > 0 %]
+      <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.first FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">❰❰ First</a>
+    [% ELSE %]
+      <span class="search-nav-disabled">❰❰ First</span>
+    [% END %]
+    [% IF this_bug_idx > 0 %]
+      [% prev_bug = this_bug_idx - 1 %]
+      <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.$prev_bug FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">❰ Prev</a>
+    [% ELSE %]
+      <span class="search-nav-disabled">❰ Prev</span>
+    [% END %]
+    [% IF this_bug_idx + 1 < last_bug_list.size %]
+      [% next_bug = this_bug_idx + 1 %]
+      <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.$next_bug FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">Next ❱</a>
+    [% ELSE %]
+      <span class="search-nav-disabled">Next ❱</span>
+    [% END %]
+    [% IF this_bug_idx + 1 < last_bug_list.size %]
+      <a class="search-nav-link" href="show_bug.cgi?id=[%- last_bug_list.last FILTER uri %]&amp;list_id=[%- my_search.id FILTER uri %]">Last ❱❱</a>
+    [% ELSE %]
+      <span class="search-nav-disabled">Last ❱❱</span>
+    [% END %]
+  </nav>
 [% END %]
