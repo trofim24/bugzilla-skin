@@ -2038,7 +2038,7 @@ input.validation_error_field {
 }
 
 .autocomplete-running {
-  background-image: url('../../images/throbber.gif') !important;
+  background-image: url('../../static/images/throbber.gif') !important;
   background-repeat: no-repeat !important;
   background-position: right 8px center !important;
 }
